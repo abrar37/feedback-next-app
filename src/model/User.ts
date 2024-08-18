@@ -27,6 +27,7 @@ export interface User extends Document{
     isAcceptingMessages: boolean;
     messages: Message[]
 }
+
 const userSchema: Schema<User> = new Schema({
     username: {
         type: String,
@@ -54,7 +55,7 @@ const userSchema: Schema<User> = new Schema({
     },
     isAcceptingMessages: {
         type: Boolean,
-        default: true
+        default: false
     },
     messages: [messageSchema]
 })
