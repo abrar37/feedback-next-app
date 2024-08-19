@@ -103,10 +103,10 @@ export default function page() {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Create Username</FormLabel>
                     <FormControl>
                       <Input 
-                        placeholder="Username"
+                        placeholder="Enter username"
                         {...field} 
                         onChange={(e) => { 
                           field.onChange(e)
@@ -128,9 +128,9 @@ export default function page() {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Email address</FormLabel>
                     <FormControl>
-                      <Input placeholder="Email" {...field} />
+                      <Input placeholder="Enter email address" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -142,9 +142,9 @@ export default function page() {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Create password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Passowrd" {...field} />
+                      <Input type="password" placeholder="Enter passowrd" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
