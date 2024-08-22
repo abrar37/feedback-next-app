@@ -22,28 +22,37 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { Message } from "@/model/User";
 import { useToast } from "./ui/use-toast";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { ApiResponse } from "@/types/ApiResponse";
 
 
-type  MessageCardProps = {
-  message: Message,
+type MessageCardProps = {
   _id: string;
+  message: Message,
   onMessageDelete: (messageId: string) => void;
 };
 
 function MessageCard({message, onMessageDelete} : MessageCardProps) {
-
   const {toast} = useToast()
 
   const handleDeleteConfirm = async () => {
-    const response = axios.delete<ApiResponse>(`/api/delete-message/${message._id}`);
+    try {
+      const response = axios.delete<ApiResponse>(`/api/delete-message/${message._id}`);
+  
+      toast({
+        title: (await response).data.message
+      });
+      onMessageDelete(message._id);
 
-    toast({
-      title: (await response).data.message
-    });
-
-    onMessageDelete(message._id);
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiResponse>;
+      toast({
+        title: 'Error',
+        description:
+          axiosError.response?.data.message ?? 'Failed to delete message',
+        variant: 'destructive',
+      });
+    }
   }
 
   return (

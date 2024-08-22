@@ -1,27 +1,20 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
-import { useDebounceCallback } from 'usehooks-ts'
 import { useToast } from "@/components/ui/use-toast"
 import { useRouter } from "next/navigation";
-import { signUpSchema } from "@/schemas/signUpSchema";
-import axios, { AxiosError } from "axios"
-import { ApiResponse } from "@/types/ApiResponse";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { signInSchema } from "@/schemas/signInSchema";
 import { signIn } from "next-auth/react";
 
 
 export default function page() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
   const router = useRouter()
+  const { toast } = useToast()
 
   // Zod implementation
   const form = useForm<z.infer<typeof signInSchema>>({
@@ -33,19 +26,31 @@ export default function page() {
   })
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+
     const result = await signIn('credentials', {
       redirect: false,
       identifier: data.identifier,
-      password: data.password
-    })
+      password: data.password,
+    });
 
-    if (!result?.error){
-      toast({
-        title: "Login failed",
-        description: "Incorrect username or password",
-        variant: "destructive"
-      })
+    console.log("Sign in result" , result)
+
+    if (result?.error) {
+      if (result.error === 'CredentialsSignin') {
+        toast({
+          title: 'Login Failed',
+          description: 'Incorrect username or password',
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: result.error,
+          variant: 'destructive',
+        });
+      }
     }
+
     if (result?.url){
       router.replace('/dashboard')
     }
@@ -91,16 +96,7 @@ export default function page() {
                   </FormItem>
                 )}
               />
-            <Button type="submit" disabled={isSubmitting}>
-              {
-                isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Please wait
-                  </>
-                ) : ('Sign In')
-              }
-            </Button>
+            <Button type="submit">Sign In</Button>
             </form>
         </Form>
         <div className="text-center mt-4">

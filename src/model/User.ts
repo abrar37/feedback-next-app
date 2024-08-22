@@ -1,10 +1,11 @@
-import mongoose, {Schema, Document} from "mongoose";
+import mongoose, { Schema, Document } from 'mongoose';
 
-export interface Message extends Document{
+export interface Message extends Document {
     content: string;
-    createdAt: Date
+    createdAt: Date;
 }
-const messageSchema: Schema<Message> = new Schema({
+
+const messageSchema: Schema<Message> = new mongoose.Schema({
     content: {
         type: String,
         required: true
@@ -25,10 +26,10 @@ export interface User extends Document{
     verifyCodeExiry: Date;
     isVerified: boolean;
     isAcceptingMessages: boolean;
-    messages: Message[]
+    messages: Message[];
 }
 
-const userSchema: Schema<User> = new Schema({
+const userSchema: Schema<User> = new mongoose.Schema({
     username: {
         type: String,
         required: [true, "Username is required"],
@@ -40,6 +41,10 @@ const userSchema: Schema<User> = new Schema({
         required: [true, "Email is required"],
         unique: true,
         match: [/.+\@.+\..+/, "Please use a valid email"]
+    },
+    password: {
+        type: String,
+        required: [true, 'Password is required'],
     },
     verifyCode: {
         type: String,

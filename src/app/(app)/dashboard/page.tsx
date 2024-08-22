@@ -101,7 +101,11 @@ function page() {
     }
   }
 
-  const {username} = session?.user as User
+  if (!session || !session.user) {
+    return <div>Please login</div>
+  }
+
+  const { username } = session?.user as User
   const baseUrl = `${window.location.protocol}//${window.location.host}`
   const profileUrl = `${baseUrl}/u/${username}`
 
@@ -111,10 +115,6 @@ function page() {
       title: "Url copied",
       description: "Profile URL has been copied to clipboard"
     })
-  }
-
-  if (!session || !session.user) {
-    return <div>Please login</div>
   }
 
   return (
@@ -165,9 +165,9 @@ function page() {
         {messages.length > 0 ? (
           messages.map((message, index) => (
             <MessageCard
-              key={message._id}
-              message={message}
-              onMessageDelete={handleDeleteMessage}
+              key = {message._id}
+              message = {message}
+              onMessageDelete = {handleDeleteMessage}
             />
           ))
         ) : (

@@ -15,6 +15,7 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials: any): Promise<any>{
                 await dbConnect()
+
                 try {
                     const user = await UserModel.findOne({
                         $or: [
@@ -29,21 +30,31 @@ export const authOptions: NextAuthOptions = {
                     if (!user.isVerified) {
                         throw new Error("Verify your account before login")
                     }
-
+                    
                     const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password)
+
                     if (isPasswordCorrect) {
                         return user
+                        
                     } else {
                         throw new Error("Incorrect password")
                     }
 
                 } catch (err: any) {
-                    throw new Error(err)
+                    console.error("Error in authorization:", err);
+                    throw new Error(err.message || "Something went wrong")
                 }
             }
 
         })
     ],
+    pages: {
+        signIn: '/sign-in',
+    },
+    session: {
+        strategy: "jwt",
+    },
+    secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         async jwt({ token, user}) {
             if (user) {
@@ -64,11 +75,4 @@ export const authOptions: NextAuthOptions = {
             return session
         }
     },
-    pages: {
-        signIn: '/sign-in'
-    },
-    session: {
-        strategy: "jwt"
-    },
-    secret: process.env.NEXTAUTH_SECRET,
 }
