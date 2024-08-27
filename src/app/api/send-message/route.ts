@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     const {username, content} = await request.json()
 
     try {
-        const user = await UserModel.findOne(username)
+        const user = await UserModel.findOne({ username }).exec();
         if (!user) {
             return Response.json(
                 {
@@ -38,6 +38,7 @@ export async function POST(request: Request) {
                 message: "Message sent successfully"
             }, {status: 200}
         )
+
     } catch (error) {
         console.log("Unexpected error occured in message:", error)
         return Response.json(

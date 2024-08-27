@@ -33,15 +33,22 @@ export default function page() {
       password: data.password,
     });
 
-    console.log("Sign in result" , result)
-
     if (result?.error) {
-      if (result.error === 'CredentialsSignin') {
+
+      if (result.error === 'Incorrect password') {
         toast({
           title: 'Login Failed',
           description: 'Incorrect username or password',
           variant: 'destructive',
         });
+        
+      } else if (result.error === "Verify your account before login") {
+          toast({
+            title: 'Account is not verified',
+            description: "Please verify your account first",
+          });
+
+          router.replace(`/verify/${data.identifier}`)
       } else {
         toast({
           title: 'Error',

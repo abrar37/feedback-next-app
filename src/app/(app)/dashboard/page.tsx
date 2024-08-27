@@ -24,6 +24,7 @@ function page() {
     setMessages(messages.filter((message) => message._id !== messageId))
   }
   const {data: session} = useSession()
+  // console.log(session)
   const form = useForm({
     resolver: zodResolver(acceptMessageSchema)
   })
