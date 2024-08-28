@@ -2,7 +2,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -19,20 +18,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
-import { Message } from "@/model/User";
 import { useToast } from "./ui/use-toast";
 import axios, { AxiosError } from "axios";
 import { ApiResponse } from "@/types/ApiResponse";
+import dayjs from "dayjs"
 
 
-type MessageCardProps = {
-  _id: string;
-  message: Message,
-  onMessageDelete: (messageId: string) => void;
-};
+function MessageCard({message, onMessageDelete} : any) {
 
-function MessageCard({message, onMessageDelete} : MessageCardProps) {
   const {toast} = useToast()
 
   const handleDeleteConfirm = async () => {
@@ -42,6 +35,7 @@ function MessageCard({message, onMessageDelete} : MessageCardProps) {
       toast({
         title: (await response).data.message
       });
+
       onMessageDelete(message._id);
 
     } catch (error) {
@@ -58,16 +52,21 @@ function MessageCard({message, onMessageDelete} : MessageCardProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Card Title</CardTitle>
+        <CardTitle>{message.content}</CardTitle>
+      </CardHeader>
+
+      <CardContent>
+        <p>{dayjs(message.createdAt).format('MMM D, YYYY h:mm A')}</p>
+      </CardContent>
+
+      <CardFooter  className="flex justify-between">
+        {/* <Button variant="outline">Reply</Button> */}
 
         <AlertDialog>
-
           <AlertDialogTrigger asChild>
-            <Button variant="destructive"><X className="w-5 h-5"/></Button>
+            <Button variant="destructive">Delete Message</Button>
           </AlertDialogTrigger>
-
           <AlertDialogContent>
-
             <AlertDialogHeader>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
@@ -75,23 +74,13 @@ function MessageCard({message, onMessageDelete} : MessageCardProps) {
                 account and remove your data from our servers.
               </AlertDialogDescription>
             </AlertDialogHeader>
-
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction onClick={handleDeleteConfirm}>Continue</AlertDialogAction>
             </AlertDialogFooter>
-
           </AlertDialogContent>
-
         </AlertDialog>
 
-        <CardDescription>Card Description</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>Card Content</p>
-      </CardContent>
-      <CardFooter>
-        <p>Card Footer</p>
       </CardFooter>
     </Card>
   );

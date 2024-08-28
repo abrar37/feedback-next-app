@@ -9,9 +9,9 @@ export async function GET(request: Request) {
     await dbConnect()
 
     const session = await getServerSession(authOptions)
-    const user: User = session?.user as User
-
-    if (!session || !session.user) {
+    const _user: User = session?.user as User;
+    
+    if (!session || !session?.user) {
         return Response.json(
             {
                 success: false,
@@ -20,14 +20,18 @@ export async function GET(request: Request) {
         )
     }
 
-    const userId = new mongoose.Types.ObjectId(user._id);
+    const userId = new mongoose.Types.ObjectId(_user._id);
+    
     try {
         const user = await UserModel.aggregate([
-            { $match: {id: userId} },
-            { $unwind: '$messages' },
+            { $match: { _id: userId } },
+            { $project: { _id: 1, messages: { $ifNull: ['$messages', []] } } },
+            { $unwind: { path: '$messages', preserveNullAndEmptyArrays: true } },
             { $sort: {'messages.createdAt': -1} },
             { $group: {_id: '$_id', messages: {$push: '$messages'}} }
-        ])
+        ]).exec();
+
+        console.log("user", user);
 
         if (!user || user.length === 0) {
             return Response.json(
@@ -37,10 +41,11 @@ export async function GET(request: Request) {
                 }, {status: 404}
             ) 
         }
+
         return Response.json(
             {
                 success: true,
-                message: user[0].messages
+                messages: user[0].messages
             }, {status: 200}
         ) 
 

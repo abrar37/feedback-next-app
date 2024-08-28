@@ -12,9 +12,15 @@ export async function POST(request: Request){
     await dbConnect()
 
     try {
-        const {username, code} = await request.json()
-        const decodedUsername = decodeURIComponent(username)
-        const user = await UserModel.findOne({username: decodedUsername})
+        const {identifier, code} = await request.json()
+        const decodedIdentifier = decodeURIComponent(identifier)
+
+        const user = await UserModel.findOne({
+            $or: [
+                { username : decodedIdentifier },
+                { email : decodedIdentifier }
+            ]
+        })
 
         if (!user) {
             return Response.json(
@@ -27,7 +33,6 @@ export async function POST(request: Request){
 
         const isCodeValid = user.verifyCode === code
         const isCodeNotExpired = new Date(user.verifyCodeExiry) > new Date()
-        // const isCodeNotExpired = true
 
         if (isCodeValid && isCodeNotExpired) {
             user.isVerified = true
@@ -44,7 +49,7 @@ export async function POST(request: Request){
             return Response.json(
                 {
                     success: false,
-                    message: "Verification code has expired"
+                    message: "Verification code has expired, Again sign up to get new"
                 }, {status: 400}
             )
 

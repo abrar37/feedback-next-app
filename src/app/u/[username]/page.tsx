@@ -77,7 +77,7 @@ function page() {
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
-        title: 'Error',
+        title: 'Opss',
         description: axiosError.response?.data.message ?? 'Failed to sent message',
         variant: 'destructive',
       });

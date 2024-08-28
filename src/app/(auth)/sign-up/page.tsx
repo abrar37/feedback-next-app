@@ -71,11 +71,11 @@ export default function page() {
       setIsSubmitting(false)
 
     } catch (error) {
-      console.error("Error in signup of user", error)
       const axiosError = error as AxiosError<ApiResponse>
       let errorMessage = axiosError.response?.data.message
+
       toast({
-        title: "SignUp failed",
+        title: "Sign up failed",
         description: errorMessage,
         variant: "destructive"
       })

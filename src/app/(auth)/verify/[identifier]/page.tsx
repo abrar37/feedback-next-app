@@ -7,7 +7,6 @@ import { verifySchema } from '@/schemas/verifySchema'
 import { ApiResponse } from '@/types/ApiResponse'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios, { AxiosError } from 'axios'
-import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
@@ -15,7 +14,7 @@ import * as z from "zod"
 
 function page() {
     const router = useRouter()
-    const params = useParams<{username: string}>()
+    const params = useParams<{identifier: string}>()
     const {toast} = useToast()
 
     const form = useForm<z.infer<typeof verifySchema>>({
@@ -24,9 +23,11 @@ function page() {
 
     const onSubmit = async (data: z.infer<typeof verifySchema>) => {
 
+        console.log("verify identifier", data)
+
         try {
             const response = await axios.post('/api/verify-code', {
-                username: params.username,
+                identifier: params.identifier,
                 code: data.code
             })
 

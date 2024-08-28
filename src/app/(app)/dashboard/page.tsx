@@ -7,7 +7,7 @@ import { Message } from "@/model/User"
 import { acceptMessageSchema } from "@/schemas/acceptMessageSchema"
 import { ApiResponse } from "@/types/ApiResponse"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Switch } from "@radix-ui/react-switch"
+import { Switch } from "@/components/ui/switch"
 import axios, { AxiosError } from "axios"
 import { Loader2, RefreshCcw } from "lucide-react"
 import { User } from "next-auth"
@@ -24,13 +24,14 @@ function page() {
     setMessages(messages.filter((message) => message._id !== messageId))
   }
   const {data: session} = useSession()
-  // console.log(session)
   const form = useForm({
     resolver: zodResolver(acceptMessageSchema)
   })
   const {register, watch, setValue} = form
   const acceptMessages = watch("acceptMessages")
 
+
+  // Messages accepting status
   const fetchAcceptMessage = useCallback(async () => {
     setIsSwitchLoading(true)
     try {
@@ -49,16 +50,25 @@ function page() {
     }
   }, [setValue])
 
+  // Geting Message
   const fetchMessages = useCallback(async (refresh: boolean = false) => {
     setIsLoading(true)
     setIsSwitchLoading(false)
     try {
       const response = await axios.get<ApiResponse>('api/get-messages')
+      
       setMessages(response.data.messages || [])
+
       if (refresh) {
         toast({
           title: "Refreshed Messages",
           description: "Showing latest messages",
+        })
+      }
+
+      if (response.data.messages?.length === 0) {
+        toast({
+          title: "No message found",
         })
       }
     } catch (error) {
@@ -76,9 +86,11 @@ function page() {
   }, [setIsLoading, setMessages])
 
   useEffect(() => {
-    if (!session || !session.user) return
+    if (!session || !session.user) return;
+
     fetchMessages()
     fetchAcceptMessage()
+
   }, [session, setValue, fetchAcceptMessage, fetchMessages])
 
   //handle switch change
@@ -103,7 +115,7 @@ function page() {
   }
 
   if (!session || !session.user) {
-    return <div>Please login</div>
+    return <div className="min-h-[85vh] flex justify-center items-center"><Loader2 className="h-4 w-4 animate-spin" /></div>
   }
 
   const { username } = session?.user as User
@@ -135,7 +147,7 @@ function page() {
         </div>
       </div>
 
-      <div className="mb-4">
+      <div className="flex mb-4">
         <Switch
           {...register('acceptMessages')}
           checked={acceptMessages}
