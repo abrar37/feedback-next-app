@@ -1,16 +1,16 @@
 [
     {
-      "title": "Message from User123",
+      "title": "Message for User1",
       "content": "Hey, how are you doing today?",
       "received": "10 minutes ago"
     },
     {
-      "title": "Message from SecretAdmirer",
+      "title": "Message for User2",
       "content": "I really liked your recent post!",
       "received": "2 hours ago"
     },
     {
-      "title": "Message from MysteryGuest",
+      "title": "Message for User3",
       "content": "Do you have any book recommendations?",
       "received": "1 day ago"
     }

@@ -7,7 +7,7 @@ import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { CardHeader, CardContent, Card } from '@/components/ui/card';
-import { useCompletion } from 'ai/react';
+// import { useCompletion } from 'ai/react';
 import {
   Form,
   FormControl,
@@ -29,22 +29,13 @@ const parseStringMessages = (messageString: string): string[] => {
   return messageString.split(specialChar);
 };
 
-const initialMessageString =
-  "What's your favorite movie?||Do you have any pets?||What's your dream job?";
+
+const initialMessageString = "If you could instantly learn any skill, what would it be and why?||What’s a book, movie, or song that has inspired you recently?||If you could live in any fictional world, where would you choose and what would you do there?";
 
 function page() {
   const params = useParams<{ username: string }>();
   const username = params.username;
 
-  const {
-    complete,
-    completion,
-    isLoading: isSuggestLoading,
-    error,
-  } = useCompletion({
-    api: '/api/suggest-messages',
-    initialCompletion: initialMessageString,
-  });
 
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
@@ -87,14 +78,6 @@ function page() {
     }
   };
 
-  const fetchSuggestedMessages = async () => {
-    try {
-      complete('');
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-      // Handle error appropriately
-    }
-  };
   
   return (
     <div className="container mx-auto my-8 p-6 bg-white rounded max-w-4xl">
@@ -137,24 +120,16 @@ function page() {
 
       <div className="space-y-4 my-8">
         <div className="space-y-2">
-          <Button
-            onClick={fetchSuggestedMessages}
-            className="my-4"
-            disabled={isSuggestLoading}
-          >
-            Suggest Messages
-          </Button>
           <p>Click on any message below to select it.</p>
         </div>
         <Card>
           <CardHeader>
             <h3 className="text-xl font-semibold">Messages</h3>
           </CardHeader>
+
           <CardContent className="flex flex-col space-y-4">
-            {error ? (
-              <p className="text-red-500">{error.message}</p>
-            ) : (
-              parseStringMessages(completion).map((message, index) => (
+            {
+              parseStringMessages(initialMessageString).map((message, index) => (
                 <Button
                   key={index}
                   variant="outline"
@@ -164,8 +139,9 @@ function page() {
                   {message}
                 </Button>
               ))
-            )}
+            }
           </CardContent>
+
         </Card>
       </div>
       <Separator className="my-6" />
