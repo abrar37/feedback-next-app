@@ -52,7 +52,7 @@ function MessageCard({message, onMessageDelete} : any) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{message.content}</CardTitle>
+        <CardTitle className="text-xl">{message.content}</CardTitle>
       </CardHeader>
 
       <CardContent>

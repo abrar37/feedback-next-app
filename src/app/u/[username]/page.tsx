@@ -32,7 +32,7 @@ const parseStringMessages = (messageString: string): string[] => {
 
 const initialMessageString = "If you could instantly learn any skill, what would it be and why?||What’s a book, movie, or song that has inspired you recently?||If you could live in any fictional world, where would you choose and what would you do there?";
 
-function page() {
+export default function Page() {
   const params = useParams<{ username: string }>();
   const username = params.username;
 
@@ -154,5 +154,3 @@ function page() {
     </div>
   )
 }
-
-export default page

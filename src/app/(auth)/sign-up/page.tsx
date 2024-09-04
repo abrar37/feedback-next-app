@@ -16,7 +16,7 @@ import { Loader2 } from "lucide-react";
 import Link from "next/link";
 
 
-export default function page() {
+export default function Page() {
   const [username, setUsername] = useState('')
   const [usernameMessage, setUsernameMessage] = useState('')
   const [isCheckingUsername, setIsCheckingUsername] = useState(false)

@@ -12,7 +12,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from "zod"
 
-function page() {
+export default function Page() {
     const router = useRouter()
     const params = useParams<{identifier: string}>()
     const {toast} = useToast()
@@ -23,7 +23,7 @@ function page() {
 
     const onSubmit = async (data: z.infer<typeof verifySchema>) => {
 
-        console.log("verify identifier", data)
+        // console.log("verify identifier", data)
 
         try {
             const response = await axios.post('/api/verify-code', {
@@ -83,5 +83,3 @@ function page() {
         </div>
     )
 }
-
-export default page

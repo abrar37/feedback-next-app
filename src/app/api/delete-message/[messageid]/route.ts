@@ -40,7 +40,7 @@ export async function DELETE(request: Request, {params}: {params: {messageid: st
         )
 
     } catch (error) {
-        console.log("Error in deleting messages route", error)
+        // console.log("Error in deleting messages route", error)
         return Response.json(
             {
                 success: false,

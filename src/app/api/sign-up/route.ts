@@ -77,7 +77,7 @@ export async function POST(request: Request){
         }, {status: 201})
 
     } catch (error) {
-        console.error("api/sign-up/route/line-82: ", error)
+        // console.error("api/sign-up/route/line-82: ", error)
         return Response.json(
             {
                 success: false,

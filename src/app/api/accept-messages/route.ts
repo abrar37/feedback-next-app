@@ -47,7 +47,7 @@ export async function POST(request: Request) {
         )
 
     } catch (error) {
-        console.log("Faild to update user status for accept messages");
+        // console.log("Faild to update user status for accept messages");
         return Response.json(
             {
                 success: false,

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import MessageCard from "@/components/MessageCard"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -15,19 +15,25 @@ import { useSession } from "next-auth/react"
 import { useCallback, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 
-function page() {
+export default function Page() {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isSwitchLoading, setIsSwitchLoading] = useState(false)
-  const {toast} = useToast()
+
+  const {toast} = useToast();
+  
   const handleDeleteMessage = (messageId: string) => {
     setMessages(messages.filter((message) => message._id !== messageId))
   }
+
   const {data: session} = useSession()
+
   const form = useForm({
     resolver: zodResolver(acceptMessageSchema)
   })
-  const {register, watch, setValue} = form
+
+  const {register, watch, setValue} = form;
+
   const acceptMessages = watch("acceptMessages")
 
 
@@ -48,7 +54,7 @@ function page() {
     } finally {
       setIsSwitchLoading(false)
     }
-  }, [setValue])
+  }, [setValue, toast])
 
   // Geting Message
   const fetchMessages = useCallback(async (refresh: boolean = false) => {
@@ -83,7 +89,7 @@ function page() {
       setIsSwitchLoading(true)
     } 
 
-  }, [setIsLoading, setMessages])
+  }, [setIsLoading, setMessages, toast])
 
   useEffect(() => {
     if (!session || !session.user) return;
@@ -190,5 +196,3 @@ function page() {
     </div>
   );
 }
-
-export default page
