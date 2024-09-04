@@ -118,7 +118,5 @@ The app is deployed on Vercel. Follow these steps to deploy:
 - Set up environment variables in Vercel.
 - Deploy the app.
 
-Check out App here [Live App ](feedback-next-app.vercel.app)
+Click [here](https://feedback-next.vercel.app/) to visit live app.
 
-## Inspired By 
-https://github.com/hiteshchoudhary/ama-app
